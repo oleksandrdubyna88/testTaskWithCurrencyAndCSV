@@ -78,13 +78,23 @@ namespace WebApplication1.Controllers
             ResponceModel res = new ResponceModel();
 
             // Create a request for the URL.
-           WebRequest request = WebRequest.Create($"https://openexchangerates.org/api/latest.json?app_id={app_id}&base={from}&symbols={to}");
+            WebRequest request = WebRequest.Create($"https://openexchangerates.org/api/latest.json?app_id={app_id}&base={from}&symbols={to}");
             //WebRequest request = WebRequest.Create($"https://openexchangerates.org/api/latest.json?app_id={app_id}");
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
 
             // Get the response.
-            WebResponse response = request.GetResponse();
+            WebResponse response = default;
+
+            try
+            {
+                response = request.GetResponse();
+            }
+            catch (Exception e)
+            {
+                res.Error = e.Message;
+                return res;
+            }
             // Display the status.
             Console.WriteLine(((HttpWebResponse)response).StatusDescription);
 
